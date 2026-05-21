@@ -1,0 +1,132 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --gold: #FFD700;
+  --bg-color: #0a0a0f;
+  --card-bg: rgba(20, 20, 30, 0.8);
+  --card-hover: rgba(30, 30, 50, 0.9);
+  --border-color: rgba(255, 215, 0, 0.3);
+}
+
+body {
+  font-family: 'Oswald', sans-serif;
+  background-color: var(--bg-color);
+  background-image: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0f 100%);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+header h1 {
+  font-family: 'Abril Fatface', serif;
+  font-size: 3.5rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 1.2rem;
+  color: #aaa;
+  letter-spacing: 1px;
+}
+
+.cards-container {
+  display: flex;
+  gap: 30px;
+  max-width: 1000px;
+  width: 90%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  min-width: 300px;
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+  transform: skewX(-25deg);
+  transition: 0.5s;
+}
+
+.card:hover::before {
+  left: 150%;
+}
+
+.card:hover {
+  background: var(--card-hover);
+  border-color: var(--gold);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+}
+
+.card .icon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+}
+
+.card h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: var(--gold);
+}
+
+.card p {
+  font-size: 1rem;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+footer {
+  margin-top: 60px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2.5rem;
+  }
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    width: 100%;
+    max-width: 400px;
+  }
+}

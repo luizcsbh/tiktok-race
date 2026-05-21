@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>TikTok F1 Race Overlay</title>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Russo+One&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style/race.css">
+</head>
+<body class="theme-day f1-race">
+<div id="scene">
+  <div id="sky">
+    <!-- nuvens decorativas -->
+    <div class="cloud" style="width:90px;height:28px;top:12px;left:60px;opacity:.7"></div>
+    <div class="cloud" style="width:60px;height:20px;top:8px; left:120px;opacity:.6"></div>
+    <div class="cloud" style="width:110px;height:32px;top:18px;left:280px;opacity:.65"></div>
+    <div class="cloud" style="width:80px;height:24px;top:10px;left:370px;opacity:.55"></div>
+    <div class="cloud" style="width:100px;height:30px;top:22px;left:560px;opacity:.7"></div>
+    <div class="cloud" style="width:70px;height:22px;top:8px; left:650px;opacity:.6"></div>
+    <div class="cloud" style="width:95px;height:28px;top:15px;left:800px;opacity:.65"></div>
+  </div>
+  <div id="mountains">
+    <!-- Arquibancada genérica (usando as montanhas antigas como base ou redesenhando) -->
+    <svg width="100%" height="80" viewBox="0 0 960 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;bottom:0">
+      <!-- Arquibancada simples -->
+      <polygon points="0,80 120,30 240,80" fill="#666" opacity=".8"/>
+      <polygon points="80,80 200,20 330,80"  fill="#555" opacity=".9"/>
+      <polygon points="250,80 380,25 490,80" fill="#666" opacity=".8"/>
+      <polygon points="380,80 500,15 610,80"  fill="#555" opacity=".9"/>
+      <polygon points="550,80 670,30 790,80" fill="#666" opacity=".8"/>
+      <polygon points="720,80 840,10 960,80"  fill="#555" opacity=".9"/>
+      <polygon points="860,80 960,30 960,80" fill="#666" opacity=".7"/>
+    </svg>
+  </div>
+  <div id="grass"></div>
+
+  <!-- TOP BAR -->
+  <div id="top-bar">
+    <div id="title-box">
+      <h1>🏎️ F1 TIKTOK RACE</h1>
+      <p id="sub-label"> 1º a chegar vence!</p>
+    </div>
+    <div id="conn-pill" class="demo">🟣 MODO DEMO</div>
+    <div id="goal-badge"><span>Meta</span><strong id="goal-disp">1000</strong></div>
+  </div>
+
+  <!-- PISTA -->
+  <div id="track-wrap">
+    <div id="finish-pole"><div id="finish-flag">🏁</div></div>
+    <!-- raias geradas por JS -->
+  </div>
+
+  <!-- NOTIFICAÇÃO -->
+  <div id="gift-notif">
+    <div class="gu" id="notif-user">@usuario</div>
+    <div class="gm" id="notif-msg">🌹 10x Rose</div>
+    <div class="gh" id="notif-h">→ Carro acelera!</div>
+  </div>
+
+  <!-- VENCEDOR -->
+  <div id="winner-overlay">
+    <div class="w-emoji" id="we">🏆</div>
+    <div class="w-title">VENCEDOR!</div>
+    <div class="w-horse" id="wh"></div>
+    <div class="w-sub"   id="ws"></div>
+    <button class="w-btn" onclick="resetRace()">🔄 Nova Corrida</button>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="admin-bar">
+    <span style="color:var(--gold);font-size:13px">⚙️</span>
+    <label>TikTok @:</label>
+    <input type="text" id="tik-id" placeholder="usuario" style="width:80px">
+    <button class="btn btn-green"  onclick="connectTikTok()">Conectar</button>
+    <button class="btn btn-red"    onclick="disconnectTikTok()">Desconectar</button>
+    <label style="margin-left:6px">Meta:</label>
+    <input type="number" id="goal-in" value="1000" min="10" max="99999" style="width:54px">
+    <button class="btn btn-blue"   onclick="applyGoal()">OK</button>
+    <button class="btn btn-blue"   onclick="simulateGift()">🎁 Simular</button>
+    <button class="btn btn-purple" onclick="resetRace()">🔄 Reiniciar</button>
+    <button class="btn btn-gold" id="btn-audio" onclick="toggleAudio()" style="margin-left:4px; font-size:11px;">🔇 Áudio Off</button>
+    <div style="display:flex;gap:3px">
+      <button class="theme-btn active" onclick="setTheme('day')">🌅 Dia</button>
+      <button class="theme-btn"        onclick="setTheme('sunset')">🌇 Sunset</button>
+      <button class="theme-btn"        onclick="setTheme('night')">🌙 Noite</button>
+      <button class="theme-btn"        onclick="setTheme('neon')">⚡ Neon</button>
+    </div>
+    <button class="btn btn-gold" onclick="toggleAdmin()" style="margin-left:auto">Ocultar ▲</button>
+  </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>window.RACE_TYPE = 'f1';</script>
+<script src="script/race.js"></script>
+<script src="script/security.js"></script>
+</body>
+</html>

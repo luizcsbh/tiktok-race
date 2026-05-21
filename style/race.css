@@ -1,0 +1,343 @@
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#FFD700;
+  --lane-h:42px;
+  --track-left:110px;
+  --track-right:900px;
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Oswald', sans-serif;
+  background: transparent;
+}
+
+/* ───────── CENA ───────── */
+#scene {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* SKY */
+#sky{
+  position:absolute;top:0;left:0;right:0;height:100%;
+  background:linear-gradient(180deg,#1a4a8a 0%,#4a9fd4 35%,#7ec8e3 50%,#a8d5e2 55%);
+}
+
+/* GRAMA COMUM */
+#grass{
+  position:absolute;bottom:0;left:0;right:0;height:55px;
+  background:linear-gradient(180deg,#2d7a1a 0%,#3d9a22 60%,#4ab028 100%);
+}
+
+/* GRAMA F1: Zebra da pista */
+body.f1-race #grass::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:8px;
+  background:repeating-linear-gradient(90deg,#e74c3c 0,#e74c3c 20px,#fff 20px,#fff 40px);
+  border-bottom: 2px solid #222;
+}
+
+/* GRAMA HORSE: Linhas verdes alternadas */
+body.horse-race #grass::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:6px;
+  background:repeating-linear-gradient(90deg,#3d9a22 0,#3d9a22 12px,#2d7a1a 12px,#2d7a1a 24px);
+}
+
+/* NUVENS */
+.cloud{position:absolute;background:#fff;border-radius:50px;opacity:.75;}
+
+/* PLATEIA (audience) - para cavalos */
+#audience{position:absolute;left:40px;right:40px;top:28px;height:84px;pointer-events:none;display:block}
+.spectator{position:absolute;bottom:0;width:18px;height:36px;transform-origin:center bottom;}
+.spectator .head{width:14px;height:14px;border-radius:50%;background:#ffe0c6;border:1px solid rgba(0,0,0,.08);margin:0 auto}
+.spectator .torso{width:14px;height:10px;background:#333;border-radius:6px;margin-top:3px}
+.spectator .arm{position:absolute;top:18px;width:6px;height:6px;background:transparent;left:50%;transform:translateX(-50%)}
+.spectator .heart{position:absolute;left:50%;transform:translateX(-50%) scale(0);top:-6px;width:14px;height:12px;background:transparent}
+.spectator .heart:before,.spectator .heart:after{content:'';position:absolute;width:7px;height:11px;background:#ff6b81;border-radius:7px;transform:rotate(45deg);left:3px;top:0}
+.spectator .heart:after{transform:rotate(-45deg);left:0}
+
+/* cheer animation */
+.spectator.cheer{animation:specBounce .55s ease}
+.spectator.cheer .heart{animation:heartPop .9s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes specBounce{0%{transform:translateY(0)}30%{transform:translateY(-8px)}60%{transform:translateY(0)}100%{transform:translateY(0)}}
+@keyframes heartPop{0%{transform:translateX(-50%) scale(0);opacity:0}30%{transform:translateX(-50%) scale(1.05);opacity:1}60%{transform:translateX(-50%) translateY(-18px) scale(.9);opacity:1}100%{transform:translateX(-50%) translateY(-36px) scale(.6);opacity:0}}
+
+/* MONTANHAS (ARQUIBANCADAS NO F1 E FUNDO HORSE) */
+#mountains{position:absolute;bottom:55px;left:0;right:0;height:80px;pointer-events:none}
+
+/* ───────── PISTA ───────── */
+#track-wrap{
+  position:absolute;
+  top:0;bottom:0;margin:auto 0;left:0;right:0;
+  height:calc(var(--lane-h)*12 + 2px);
+}
+
+/* F1 Pista */
+body.f1-race #track-wrap {
+  background:#2a2a2a; /* Asfalto escuro */
+  border-top:8px solid transparent;
+  border-bottom:3px solid #111;
+}
+body.f1-race #track-wrap::before{
+  content:'';position:absolute;top:-8px;left:0;right:0;height:8px;
+  background:repeating-linear-gradient(90deg,#fff 0,#fff 20px,#e74c3c 20px,#e74c3c 40px);
+  border-top: 2px solid #222;
+}
+body.f1-race .lane {
+  border-bottom:1px dashed rgba(255,255,255,.3); /* Faixa pontilhada de rua */
+}
+body.f1-race .lane:last-child {border-bottom:none}
+
+
+/* Cavalos Pista */
+body.horse-race #track-wrap {
+  background:rgba(0,0,0,.05);
+  border-top:3px solid #8B6914;
+  border-bottom:3px solid #8B6914;
+}
+body.horse-race .lane {
+  border-bottom:1px solid rgba(139,105,20,.35);
+}
+body.horse-race .lane:nth-child(odd) {background:rgba(200,169,110,.22)}
+body.horse-race .lane:nth-child(even){background:rgba(180,145, 80,.14)}
+
+
+/* faixas (lanes comuns) */
+.lane{
+  position:relative;
+  height:var(--lane-h);
+  display:flex;align-items:center;
+  overflow:visible;
+}
+
+/* rótulo esquerdo */
+.lane-label{
+  position:absolute;left:0;top:0;bottom:0;
+  width:108px;
+  display:flex;align-items:center;gap:4px;padding-left:6px;
+  background:rgba(0,0,0,.8);
+  border-right:2px solid rgba(255,215,0,.4);
+  z-index:20;pointer-events:none;
+  flex-shrink:0;
+}
+body.horse-race .lane-label{
+  background:rgba(0,0,0,.52);
+}
+
+.lane-num{
+  width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+  border:1.5px solid rgba(255,255,255,.5);color:#fff;
+}
+.lane-emoji{font-size:15px;flex-shrink:0}
+.lane-name{font-size:9.5px;color:#fff;text-shadow:1px 1px 2px #000;white-space:nowrap;overflow:hidden;font-weight:600}
+
+/* linha de largada */
+.start-mark{
+  position:absolute;left:108px;top:0;bottom:0;width:4px;
+  background:rgba(255,255,255,.8);z-index:8;pointer-events:none;
+}
+body.horse-race .start-mark{
+  width:3px; background:rgba(255,255,255,.5);
+}
+
+/* linha de chegada */
+#finish-pole{
+  position:absolute;right:22px;top:0;bottom:0;width:12px;
+  background:repeating-linear-gradient(180deg,#fff 0,#fff 10px,#111 10px,#111 20px);
+  z-index:18;border-radius:2px;pointer-events:none;
+  box-shadow: -2px 0 5px rgba(0,0,0,.5);
+}
+body.horse-race #finish-pole {
+  width:8px;
+  background:repeating-linear-gradient(180deg,#fff 0,#fff 7px,#111 7px,#111 14px);
+  box-shadow: none;
+}
+#finish-flag{
+  position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+  font-size:20px;animation:fw .9s ease-in-out infinite;
+}
+@keyframes fw{0%,100%{transform:translateX(-50%) rotate(-6deg)}50%{transform:translateX(-50%) rotate(6deg)}}
+
+/* ───────── ATLETAS (CARRO / CAVALO) ───────── */
+.racer-wrap{
+  position:absolute;
+  left:112px;
+  top:50%;transform:translateY(-50%);
+  width:68px;height:38px;
+  z-index:15;cursor:pointer;
+}
+body.f1-race .racer-wrap {
+  width: 90px;
+  height: 40px;
+  transition:left .3s cubic-bezier(.1,.8,.2,1);
+}
+body.f1-race .racer-wrap .car-svg {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+body.horse-race .racer-wrap {
+  transition:left .4s cubic-bezier(.25,.8,.25,1);
+}
+
+.racer-wrap:hover .htip{display:block}
+.htip{
+  display:none;position:absolute;bottom:42px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.88);color:#fff;padding:4px 8px;border-radius:6px;
+  font-size:11px;white-space:nowrap;border:1px solid var(--gold);z-index:60;
+}
+
+/* F1 Car Animations */
+@keyframes cSpeed{
+  0%{transform:translateY(-50%) translateX(0)}
+  25%{transform:translateY(calc(-50% + 1px)) translateX(-2px)}
+  50%{transform:translateY(-50%) translateX(2px)}
+  75%{transform:translateY(calc(-50% - 1px)) translateX(-1px)}
+  100%{transform:translateY(-50%) translateX(0)}
+}
+.speeding{animation:cSpeed .2s ease infinite!important}
+.exhaust {
+  position: absolute; left: -10px; top: 17px; width: 12px; height: 6px;
+  background: #ff5e00; border-radius: 50%; filter: blur(2px);
+  opacity: 0; transition: opacity .1s;
+}
+.speeding .exhaust { opacity: 1; animation: flame .1s infinite alternate; }
+@keyframes flame { from { transform: scaleX(1); } to { transform: scaleX(1.5) translateX(-2px); background: #ffaa00; } }
+
+/* Horse Animations */
+@keyframes hJump{
+  0%{transform:translateY(-50%)}
+  25%{transform:translateY(calc(-50% - 10px))}
+  55%{transform:translateY(-50%)}
+  78%{transform:translateY(calc(-50% - 4px))}
+  100%{transform:translateY(-50%)}
+}
+.jumping{animation:hJump .5s ease!important}
+
+/* ───────── TOP BAR ───────── */
+#top-bar{
+  position:absolute;top:0;left:0;right:0;height:80px;
+  background:linear-gradient(180deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.3) 100%);
+  display:flex;align-items:center;padding:0 14px;gap:10px;z-index:30;
+}
+#title-box h1{font-family:'Abril Fatface',serif;font-size:20px;color:var(--gold);letter-spacing:1px;line-height:1}
+#title-box p{font-size:9.5px;color:#ccc;margin-top:2px}
+#conn-pill{padding:3px 11px;border-radius:20px;font-size:10px;font-weight:700;border:1.5px solid;white-space:nowrap}
+#conn-pill.demo{background:rgba(142,68,173,.8);border-color:#9b59b6;color:#fff}
+#conn-pill.ok  {background:rgba(39,174,96,.8); border-color:#2ecc71;color:#fff}
+#conn-pill.err {background:rgba(192,57,43,.8); border-color:#e74c3c;color:#fff}
+#conn-pill.live.ok{background:rgba(39,174,96,.8); border-color:#2ecc71;color:#fff} /* aliases */
+#goal-badge{
+  margin-left:auto;background:rgba(255,215,0,.14);
+  border:1.5px solid var(--gold);border-radius:8px;
+  padding:4px 10px;text-align:center;min-width:60px;
+}
+#goal-badge span{display:block;font-size:9px;color:#ccc}
+#goal-badge strong{font-size:15px;color:var(--gold)}
+
+/* ───────── RODAPÉ / ADMIN ───────── */
+#admin-bar{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.93);border-top:2px solid var(--gold);
+  padding:5px 10px;z-index:40;
+  display:flex;align-items:center;flex-wrap:wrap;gap:5px;
+}
+#admin-bar.hidden{display:none}
+#admin-bar label{font-size:10px;color:#aaa}
+#admin-bar input{background:#111;color:#fff;border:1px solid #444;border-radius:4px;padding:2px 5px;font-size:10px}
+.btn{padding:4px 9px;border-radius:5px;border:none;font-size:10px;font-weight:700;cursor:pointer;font-family:'Oswald',sans-serif;letter-spacing:.3px;transition:transform .1s}
+.btn:active{transform:scale(.95)}
+.btn-gold  {background:var(--gold);color:#000}
+.btn-red   {background:#c0392b;color:#fff}
+.btn-green {background:#27ae60;color:#fff}
+.btn-blue  {background:#2980b9;color:#fff}
+.btn-purple{background:#8e44ad;color:#fff}
+.theme-btn{padding:3px 7px;border-radius:4px;border:1px solid #555;background:#222;color:#aaa;cursor:pointer;font-size:10px;transition:all .2s}
+.theme-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(255,215,0,.1)}
+
+/* ───────── NOTIFICAÇÃO ───────── */
+#gift-notif{
+  position:absolute;bottom:46px;left:50%;
+  transform:translateX(-50%) scale(0);
+  background:linear-gradient(135deg,#1a0533,#2d1b69);
+  border:2px solid var(--gold);border-radius:12px;
+  padding:9px 18px;z-index:35;text-align:center;min-width:200px;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+#gift-notif.show{transform:translateX(-50%) scale(1)}
+#gift-notif .gu{font-size:12px;color:#ccc}
+#gift-notif .gm{font-size:15px;color:var(--gold);font-weight:700}
+#gift-notif .gh{font-size:10px;color:#aaa;margin-top:2px}
+
+/* ───────── VENCEDOR ───────── */
+#winner-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.83);
+  z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;
+}
+#winner-overlay.show{display:flex;animation:wFade .4s ease}
+@keyframes wFade{from{opacity:0}to{opacity:1}}
+.w-emoji{font-size:58px;animation:wB .5s ease infinite alternate}
+@keyframes wB{from{transform:translateY(0)}to{transform:translateY(-13px)}}
+.w-title{font-family:'Abril Fatface',serif;font-size:50px;color:var(--gold);text-shadow:0 0 28px rgba(255,215,0,.7);animation:wP 1s ease-in-out infinite}
+@keyframes wP{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.w-racer-name{font-size:24px;color:#fff;margin:7px 0}
+.w-sub  {font-size:12px;color:#bbb}
+.w-btn  {margin-top:14px;padding:9px 24px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+
+/* confeti */
+.confetti{position:absolute;width:8px;height:8px;z-index:48;animation:cF 2.5s linear forwards;pointer-events:none;border-radius:2px}
+@keyframes cF{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(660px) rotate(700deg);opacity:0}}
+
+/* ── TEMAS ── */
+body.theme-sunset #sky{background:linear-gradient(180deg,#6b1a00 0%,#d4520a 30%,#f7a940 52%,#ffd6a0 56%)}
+body.theme-sunset #grass{background:linear-gradient(180deg,#2d5a14 0%,#3a7a1c 100%)}
+body.theme-night  #sky{background:linear-gradient(180deg,#020510 0%,#0a1530 40%,#111f45 55%)}
+body.theme-night  #grass{background:linear-gradient(180deg,#0a2206 0%,#122e08 100%)}
+body.theme-night  #scene{box-shadow:0 0 40px rgba(255,215,0,.3)}
+
+body.theme-neon   #sky{background:linear-gradient(180deg,#020202 0%,#060012 50%)}
+body.theme-neon   #grass{background:linear-gradient(180deg,#001a00 0%,#003300 100%)}
+body.theme-neon   #scene{border-color:#00ffff;box-shadow:0 0 50px rgba(0,255,255,.5)}
+body.theme-neon   #top-bar{border-bottom:1px solid #00ffff22}
+body.theme-neon   #track-wrap{border-color:#00ffff55}
+body.theme-neon   .lane-label{border-right-color:#00ffff44}
+
+/* Neon Finish Pole differences */
+body.theme-neon.f1-race #finish-pole{background:repeating-linear-gradient(180deg,#00ffff 0,#00ffff 10px,#003333 10px,#003333 20px)}
+body.theme-neon.horse-race #finish-pole{background:repeating-linear-gradient(180deg,#00ffff 0,#00ffff 7px,#003333 7px,#003333 14px)}
+
+/* neon glow nos carros */
+body.theme-neon .car-svg{filter:drop-shadow(0 0 4px currentColor) drop-shadow(0 0 8px rgba(0,255,255,.3))}
+
+/* neon glow nos cavalos: usa a variável --neon-color definida por cavalo (aplicada em JS) */
+body.theme-neon .horse-svg{
+  color:var(--neon-color, #00ffff);
+  filter:drop-shadow(0 0 4px currentColor) drop-shadow(0 0 10px currentColor) drop-shadow(0 0 18px rgba(255,255,255,.06));
+  transition:filter .18s ease, color .18s ease;
+}
+
+/* SOL / LUA (temas) */
+#sky .sun, #sky .moon{position:absolute;z-index:6;pointer-events:none;opacity:0;transition:all .6s cubic-bezier(.2,.9,.2,.95)}
+#sky .sun{width:110px;height:110px;border-radius:50%;right:72px;top:40px;background:radial-gradient(circle at 30% 30%, #fff59d 0%,#ffd54f 35%,#ffb74d 65%);box-shadow:0 0 40px rgba(255,200,60,.5)}
+#sky .sun.sunset{width:160px;height:90px;border-radius:50%;background:radial-gradient(circle at 40% 40%, #fff2d6 0%,#ffb74d 35%,#d95b14 70%);box-shadow:0 0 60px rgba(255,140,40,.45)}
+#sky .moon{width:78px;height:78px;border-radius:50%;left:72px;top:36px;background:radial-gradient(circle at 30% 30%, #fff,#dfefff 40%);box-shadow:0 0 30px rgba(200,220,255,.35);transform:scale(.98)}
+
+/* Visible states per theme */
+body.theme-day   #sky .sun{opacity:1;transform:translateY(0);right:72px;top:40px}
+body.theme-sunset #sky .sun{opacity:1;transform:translateY(0);bottom:92px;left:42%;top:auto;right:auto}
+body.theme-night  #sky .moon{opacity:1;transform:translateY(0);left:740px;top:40px}
+
+/* estrelas */
+.star{position:absolute;background:#fff;border-radius:50%;animation:sT 2s ease-in-out infinite}
+@keyframes sT{0%,100%{opacity:1}50%{opacity:.1}}
